@@ -8,7 +8,6 @@ class NewsFilter(FilterSet):
        model = News
        fields = {
            'name': ['exact'],
-           'post': ['exact'],
            'description': ['exact']
        }
 

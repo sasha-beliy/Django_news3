@@ -4,6 +4,8 @@ from django.urls import reverse_lazy
 from .filters import NewsFilter
 from .models import News
 from .forms import NewsForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 class NewsList(ListView):
@@ -30,17 +32,19 @@ class NewsDetail(DetailView):
     template_name = 'News.html'
     context_object_name = 'News'
 
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('simpleapp.add_news',)
     form_class = NewsForm
     model = News
     template_name = 'news_edit.html'
 
-class NewsUpdate(UpdateView):
-    form_class = NewsForm
+class NewsUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = ('simpleapp.change_news',)
     model = News
     template_name = 'news_edit.html'
 
-class NewsDelete(DeleteView):
+class NewsDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('simpleapp.delete_news',)
     model = News
     template_name = 'news_delete.html'
     success_url = reverse_lazy('news_list')
